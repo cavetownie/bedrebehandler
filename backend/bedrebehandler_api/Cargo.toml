@@ -1,0 +1,12 @@
+[package]
+name = "bedrebehandler_api"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+sqlx = { version = "0.7", features = [ "runtime-async-std", "sqlite", "chrono" ] }
+tide = "*"
+tokio = { version = "*", features = [ "full" ] }
+chrono = { version = "*" }
+serde = "*"
+serde_json = "*"

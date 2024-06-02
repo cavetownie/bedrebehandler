@@ -1,0 +1,12 @@
+debug/
+target/
+Cargo.lock
+**/*.rs.bk
+*.pdb
+data/
+**/*.db
+
+# As of right now, I do not want to share the
+# script that scrapes all the data in
+# light of maybe getting in trouble :)
+scripts/scrape.py
