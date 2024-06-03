@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS telefonnumre;
 CREATE TABLE behandler (
     identifier integer NOT NULL,
     postnummer integer NOT NULL,
-    kliniktype boolean NOT NULL,
+    kliniktype varchar(20) NOT NULL,
     navn varchar(500) NOT NULL,
     adresse varchar(500) NOT NULL,
     beskrivelse varchar(500),

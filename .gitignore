@@ -5,6 +5,7 @@ Cargo.lock
 *.pdb
 data/
 **/*.db
+**/*.db-*
 
 # As of right now, I do not want to share the
 # script that scrapes all the data in
