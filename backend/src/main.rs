@@ -26,7 +26,7 @@ struct State {
 
 // Holy shit... this is god awful!
 // TODO: Add dotenv
-const DB_URL: &str = "sqlite://../../db/bedrebehandler.db";
+const DB_URL: &str = "sqlite://../db/bedrebehandler.db";
     
 
 #[tokio::main]
