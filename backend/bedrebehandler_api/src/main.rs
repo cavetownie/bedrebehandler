@@ -1,5 +1,6 @@
-use tide::{convert::{Deserialize, Serialize}, prelude, Request, Error};
+use tide::{convert::{Deserialize, Serialize}, prelude, Request, Error, log};
 use sqlx::{migrate::MigrateDatabase, FromRow, Row, Sqlite, SqlitePool};
+use urlencoding::decode;
 
 mod controllers;
 mod handlers;
@@ -27,6 +28,8 @@ const DB_URL: &str = "sqlite://../../db/bedrebehandler.db";
 
 #[tokio::main]
 async fn main() -> tide::Result<()> {
+    log::start();
+
     let state = State {
         // We want it to panic, as the application should not start, if it cannot find the db.
         db_pool: SqlitePool::connect(DB_URL).await.unwrap()
@@ -36,6 +39,9 @@ async fn main() -> tide::Result<()> {
 
     // All physicians
     app.at("/behandlere").get(behandler::list);
+
+    // Sort by physician type
+    app.at("/behandlere/:kliniktype").get(behandler::get_by_type);
 
     app.listen("127.0.0.1:8080").await?;
     Ok(())

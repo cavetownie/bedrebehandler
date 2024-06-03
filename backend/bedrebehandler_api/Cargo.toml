@@ -10,3 +10,4 @@ tokio = { version = "*", features = [ "full" ] }
 chrono = { version = "*" }
 serde = "*"
 serde_json = "*"
+urlencoding = "*"
