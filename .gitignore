@@ -34,3 +34,7 @@ vite.config.js.timestamp-*
 .vercel
 .test-tmp
 symlink-from
+tests/
+.npmrc
+.prettierrc
+.eslint*
