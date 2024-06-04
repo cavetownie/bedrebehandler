@@ -66,6 +66,9 @@ async fn main() -> tide::Result<()> {
     // Sort by physician type
     app.at("/behandlere/:kliniktype").get(behandler::get_by_type);
 
+    // Sort by physician type and open
+    app.at("/behandlere/:kliniktype/aaben").get(behandler::get_by_type_and_open);
+
     app.listen("127.0.0.1:8080").await?;
     Ok(())
 }
