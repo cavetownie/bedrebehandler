@@ -12,6 +12,16 @@ CREATE TABLE behandler (
     PRIMARY KEY (identifier)
 );
 
+CREATE TABLE aabningstider (
+    identifier integer PRIMARY KEY,
+    behandler_id integer NOT NULL,
+    day_of_week integer NOT NULL,
+    open_time TIME NOT NULL,
+    close_time TIME NOT NULL,
+    FOREIGN KEY (behandler_id) REFERENCES behandler(identifier) ON DELETE CASCADE
+);
+
+/* Currently unused */ 
 CREATE TABLE telefonnumre (
     identifier integer PRIMARY KEY,
     behandler_id integer NOT NULL,

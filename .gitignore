@@ -12,6 +12,7 @@ data/
 # script that scrapes all the data in
 # light of maybe getting in trouble :)
 scripts/scrape.py
+scripts/classify_opening_hours_llm.py
 
 # Frontend
 .DS_Store

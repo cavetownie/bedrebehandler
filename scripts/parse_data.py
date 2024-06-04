@@ -19,8 +19,28 @@ def read_data(filename: str) -> str:
 
     return data
 
+def count_tidsbestilling() -> str:
+    files = get_data_files()
+    v, c = 0, 0
+    for file in files:
+        try:
+            file_data = read_data(file)
+            json_data = json.loads(file_data)
+
+            js = json_data.get("Aabningstider")
+
+            if js != None:
+                c += 1
+
+            v += 1
+        except:
+            continue
+
+    return v, c
+
 def parse_main() -> None:
     files = get_data_files()
+
     for file in files:
         try:
             file_data = read_data(file)
