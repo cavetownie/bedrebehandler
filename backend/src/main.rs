@@ -19,6 +19,22 @@ pub struct Behandler {
     opdateret: chrono::NaiveDateTime,
 }
 
+#[derive(Deserialize, Debug, PartialEq)]
+#[serde(default)]
+struct BehandlerInformation {
+    postnummer: u16,
+    åben: bool,
+}
+impl Default for BehandlerInformation {
+    fn default() -> Self {
+        Self {
+            postnummer: 0,
+            åben: false,
+        }
+    }
+}
+
+
 #[derive(Clone)]
 struct State {
     db_pool: sqlx::Pool<Sqlite>
@@ -66,8 +82,8 @@ async fn main() -> tide::Result<()> {
     // Sort by physician type
     app.at("/behandlere/:kliniktype").get(behandler::get_by_type);
 
-    // Sort by physician type and open
-    app.at("/behandlere/:kliniktype/aaben").get(behandler::get_by_type_and_open);
+    // Sort by physician type and open TODO: Turn into query parameter
+    // app.at("/behandlere/:kliniktype/aaben").get(behandler::get_by_type_and_open);
 
     app.listen("127.0.0.1:8080").await?;
     Ok(())

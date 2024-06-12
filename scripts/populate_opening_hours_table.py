@@ -128,6 +128,9 @@ def parse_main() -> None:
                                 add_aabningstid(identifier, 5, tid["FraKl"], tid["TilKl"])
 
                             # What about satur, sund?
+                            # TODO: (?) Add support for multiple opening hours on a day
+                            # What happens if open from 9:30 - 10:00 and 11:00 - 16:45 on
+                            # a given day?
 
         except:
             continue
