@@ -1,4 +1,6 @@
 use std::{str::FromStr, time::Duration};
+use http_types::headers::HeaderValue;
+use tide::security::{CorsMiddleware, Origin};
 
 use tide::{convert::{Deserialize, Serialize}, prelude, Request, Error, log};
 use sqlx::{migrate::MigrateDatabase, sqlite::{SqliteConnectOptions, SqliteJournalMode, SqliteSynchronous}, FromRow, Row, Sqlite, SqlitePool};
@@ -6,33 +8,8 @@ use urlencoding::decode;
 
 mod controllers;
 mod handlers;
+
 use controllers::behandler;
-
-#[derive(Clone, Serialize, Deserialize, FromRow, Debug)]
-pub struct Behandler {
-    identifier: i64,
-    postnummer: i64,
-    kliniktype: String,
-    navn: String,
-    adresse: String,
-    beskrivelse: Option<String>,
-    opdateret: chrono::NaiveDateTime,
-}
-
-#[derive(Deserialize, Debug, PartialEq)]
-#[serde(default)]
-struct BehandlerInformation {
-    postnummer: u16,
-    åben: bool,
-}
-impl Default for BehandlerInformation {
-    fn default() -> Self {
-        Self {
-            postnummer: 0,
-            åben: false,
-        }
-    }
-}
 
 
 #[derive(Clone)]
@@ -76,6 +53,12 @@ async fn main() -> tide::Result<()> {
 
     let mut app = tide::with_state(state);
 
+    let cors = CorsMiddleware::new()
+        .allow_methods("GET".parse::<HeaderValue>().unwrap())
+        .allow_origin(Origin::from("*")); // Temporary for local test
+
+    app.with(cors);
+
     // All physicians
     app.at("/behandlere").get(behandler::list);
 
@@ -83,8 +66,6 @@ async fn main() -> tide::Result<()> {
     app.at("/behandlere/:kliniktype").get(behandler::get_by_type);
 
     // Sort by physician type and open TODO: Turn into query parameter
-    // app.at("/behandlere/:kliniktype/aaben").get(behandler::get_by_type_and_open);
-
     app.listen("127.0.0.1:8080").await?;
     Ok(())
 }

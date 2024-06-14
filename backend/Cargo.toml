@@ -11,3 +11,4 @@ chrono = { version = "*" }
 serde = "*"
 serde_json = "*"
 urlencoding = "*"
+http-types = "*"
