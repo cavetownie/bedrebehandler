@@ -38,6 +38,8 @@ def count_tidsbestilling() -> str:
 
     return v, c
 
+Gs = set()
+
 def parse_main() -> None:
     files = get_data_files()
 
@@ -52,29 +54,32 @@ def parse_main() -> None:
             adresse = json_data.get("Adresse")
             beskrivelse = json_data.get("AktuelInformation")
             opdateret = json_data.get("SidstOpdateret")
+            kliniktype = json_data.get("InformationsKategori")
 
             if None in (identifier, postnummer, navn, adresse, opdateret):
                 logging.warning(f"Skipping file {file}. Containing values which cannot be null according to database schema")
                 continue
 
-            if None == beskrivelse:
-                beskrivelse = ""
+            """
+            {'Kommune', 'Tandlæge', 'Speciallæge', 'Kiropraktor', 'Fodterapeut', 'Psykolog', 'Fysioterapeut',
+            'Sygehusafdeling', 'Region', 'Tandplejer', 'Center', 'Off. myndighed', 'Ergoterapeut', 'Sygehus', 'Praktiserende læge', 'Privathospital', 'Andre', 'Apotek'}
+            """
+            behandler_type = ""
+            info = kliniktype.lower()
+            if "tandlæge" in info:
+                behandler_type = "tandlæge"
+            elif "psykolog" in info:
+                behandler_type = "psykolog"
+            elif "psykoterapeut" in info:
+                behandler_type = "psykoterapeut"
+            elif "øjenlæge" in info:
+                behandler_type = "øjenlæge"
+            elif "hudlæge" in info:
+                behandler_type = "hudlæge"
+            elif "praktiserende læge" in info:
+                behandler_type = "læge"
             else:
-                info = beskrivelse.lower()
-                if "tandlæge" in info:
-                    behandler_type = "tandlæge"
-                elif "psykolog" in info:
-                    behandler_type = "psykolog"
-                elif "psykoterapeut" in info:
-                    behandler_type = "psykoterapeut"
-                elif "øjenlæge" in info:
-                    behandler_type = "øjenlæge"
-                elif "hudlæge" in info:
-                    behandler_type = "hudlæge"
-                elif "læge" in info:
-                    behandler_type = "læge"
-                else:
-                    behandler_type = "andet"
+                behandler_type = "andet"
 
             behandler_data = {
                 "identifier": int(identifier),
@@ -107,3 +112,5 @@ if __name__ == "__main__":
 
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
     parse_main()
+
+    print(Gs)

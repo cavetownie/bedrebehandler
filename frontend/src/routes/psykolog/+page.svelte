@@ -11,7 +11,7 @@
 
   async function roll() {
     try {
-      const response = await fetch('http://localhost:8080/behandlere/læge');
+      const response = await fetch('http://localhost:8080/behandlere/psykolog');
       if (!response.ok) {
         throw new Error('Failed to fetch data');
       }

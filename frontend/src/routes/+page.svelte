@@ -22,9 +22,7 @@
 
 	<div class="flex flex-wrap justify-center gap-4">
 		<Button color="light" class="px-6 py-2" on:click={() => window.location.href="/læge"}>Læge</Button>
-		<Button color="light" class="px-6 py-2" on:click={() => window.location.href="/psykoterapeut"}>Psykoterapeut</Button>
+		<Button color="light" class="px-6 py-2" on:click={() => window.location.href="/tandlæge"}>Tandlæge</Button>
 		<Button color="light" class="px-6 py-2" on:click={() => window.location.href="/psykolog"}>Psykolog</Button>
-		<Button color="light" class="px-6 py-2" on:click={() => window.location.href="/hudlæge"}>Hudlæge</Button>
-		<Button color="light" class="px-6 py-2" on:click={() => window.location.href="/øjenlæge"}>Øjenlæge</Button>
 	</div>
 </div>
