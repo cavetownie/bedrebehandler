@@ -1,13 +1,8 @@
-<script>
-// @ts-nocheck
-
+<script lang="ts">
   import { Button } from 'flowbite-svelte';
   import Card from '../card.svelte';
 
-  /**
-	 * @type {any[]}
-	 */
-  let json = [];
+  let json: any[] = [];
 
   async function roll() {
     try {
@@ -20,13 +15,13 @@
       console.error('Error fetching data:', error);
     }
   }
-</script>
 
-<Button on:click={roll}>Roll the dice</Button>
+  roll();
+</script>
 
 <div class="flex flex-wrap justify-center gap-4 w-full">
 {#each json as behandler, i}
-    <Card navn={behandler.navn} adresse={behandler.adresse} postnummer={behandler.postnummer}>
+    <Card navn={behandler.navn} adresse={behandler.adresse} postnummer={behandler.postnummer} id={behandler.identifier}>
     </Card>
 {/each}
 </div>

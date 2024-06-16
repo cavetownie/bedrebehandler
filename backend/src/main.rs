@@ -62,6 +62,9 @@ async fn main() -> tide::Result<()> {
     // All physicians
     app.at("/behandlere").get(behandler::list);
 
+    // Single physician
+    app.at("/behandler/:id").get(behandler::get);
+
     // Sort by physician type
     app.at("/behandlere/:kliniktype").get(behandler::get_by_type);
 

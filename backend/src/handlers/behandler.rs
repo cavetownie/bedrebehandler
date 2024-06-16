@@ -37,6 +37,18 @@ pub async fn list(db: sqlx::Pool<Sqlite>) -> Result<Vec<Behandler>, Error> {
     }
 }
 
+pub async fn get(behandler_id: &str, db: sqlx::Pool<Sqlite>) -> Result<Vec<Behandler>, Error> {
+    let query_res = sqlx::query_as::<_, Behandler>("SELECT * FROM behandler WHERE identifier = $1")
+        .bind(behandler_id)
+        .fetch_all(&db)
+        .await;
+
+    match query_res {
+        Ok(result) => Ok(result),
+        Err(err) =>  Err(tide::Error::new(tide::StatusCode::InternalServerError, err))
+    }
+}
+
 
 pub async fn get_by_type(behandler_type: &str, behandler: BehandlerQueryParamters, db: sqlx::Pool<Sqlite>) -> Result<Vec<Behandler>, Error> {
     if behandler.åben == false {
