@@ -59,7 +59,8 @@ pub async fn get(behandler_id: &str, db: sqlx::Pool<Sqlite>) -> Result<Vec<Behan
 }
 
 pub async fn get_opening_hours(behandler_id: &str, db: sqlx::Pool<Sqlite>) -> Result<Vec<Aabningstider>, Error> {
-    let query_res = sqlx::query_as::<_, Aabningstider>("SELECT * FROM behandler b join aabningstider oh on b.identifier = oh.behandler_id WHERE b.identifier = $1")
+    let query_res = sqlx::query_as::<_, Aabningstider>("SELECT * FROM behandler b join aabningstider oh ON 
+                                                        b.identifier = oh.behandler_id WHERE b.identifier = $1")
         .bind(behandler_id)
         .fetch_all(&db)
         .await;
