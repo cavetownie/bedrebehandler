@@ -1,5 +1,5 @@
 <script>
-	import { NavBrand, Navbar, NavLi, NavUl, NavHamburger, Skeleton, TextPlaceholder, ImagePlaceholder, Search } from "flowbite-svelte";
+	import { Search } from "flowbite-svelte";
 	import { Button } from 'flowbite-svelte';
 	import { Heading, P, Span } from 'flowbite-svelte';
 </script>
