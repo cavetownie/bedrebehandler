@@ -1,22 +1,24 @@
 <script lang="ts">
-  import { Button } from 'flowbite-svelte';
+  import { onMount } from 'svelte';
   import Card from '../card.svelte';
 
   let json: any[] = [];
 
-  async function roll() {
-    try {
-      const response = await fetch('http://localhost:8080/behandlere/læge');
-      if (!response.ok) {
-        throw new Error('Failed to fetch data');
+  onMount(() => {
+    async function roll() {
+      try {
+        const response = await fetch('http://localhost:8080/behandlere/læge');
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+        json = await response.json();
+      } catch (error) {
+        console.error('Error fetching data:', error);
       }
-      json = await response.json();
-    } catch (error) {
-      console.error('Error fetching data:', error);
     }
-  }
 
   roll();
+  });
 </script>
 
 <div class="flex flex-wrap justify-center gap-4 w-full">
