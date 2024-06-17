@@ -30,8 +30,8 @@
 </script>
 
 
-<div>
-  <Toggle bind:checked={findOpen} on:change={() => populate()}>Vis kun behandlere som er åbne nu!</Toggle>
+<div class="py-4 flex flex-wrap justify-center">
+  <Toggle bind:checked={findOpen} on:change={() => populate()}>Vis kun behandlere som er åbne for tidsbestilling nu!</Toggle>
 </div>
 <div class="flex flex-wrap justify-center gap-4 w-full">
 {#each json as behandler, i}

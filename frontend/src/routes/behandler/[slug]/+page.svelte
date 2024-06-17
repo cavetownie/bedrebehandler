@@ -4,6 +4,7 @@
 	import { onMount } from 'svelte';
 	import { Card, Li } from 'flowbite-svelte';
 	import DOMPurify from 'dompurify';
+	import Navbar from '../../navbar.svelte';
 
 	export let data: BehandlerData;
 
@@ -73,12 +74,13 @@
 				console.error('Error fetching aabningstids data:', error);
 			}
 		}
-
+		
 		populate(data.name);
 		get_aabningstider(data.name);
 	});
 </script>
 
+<Navbar />
 <div class="w-screen flex justify-center items-center py-12">
 	<Card class="w-full sm:w-4/5 xl:w-[50rem]">
 		<h5 class="mb-3 text-3xl font-bold dark:text-white">{behandler.navn}</h5>
