@@ -2,10 +2,16 @@
     import { marked } from 'marked';
     import type { BehandlerData } from "./+page";
     import { onMount } from 'svelte';
+    import { Card, Label } from 'flowbite-svelte';
+    import DOMPurify from 'dompurify';
+
     export let data: BehandlerData;
 
     let behandler: any = {};
-    let beskrivelse: string = "";
+
+    function capFirstLet(s: string) {
+      return s[0].toUpperCase() + s.slice(1);
+    }
 
     onMount(() => {
         async function populate(id: string) {
@@ -18,7 +24,13 @@
                 behandler = tmp[0];
 
                 if (behandler.beskrivelse) {
-                    beskrivelse = await marked(behandler.beskrivelse); // TODO: xss sanitize
+                  behandler.beskrivelse = DOMPurify.sanitize(capFirstLet(await marked(behandler.beskrivelse)));
+                } else {
+                  behandler.beskrivelse = "Denne klinik har ingen beskrivelse."
+                }
+
+                if (behandler.kliniktype) {
+                  behandler.kliniktype = capFirstLet(behandler.kliniktype);
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -29,49 +41,21 @@
     });
 </script>
 
-<style>
-  .card {
-    @apply p-4 bg-white rounded-lg shadow-md;
-  }
+<div class="flex justify-center h-screen py-12">
+  <Card class="w-full max-w-screen-lg p-4 bg-white rounded-lg horizontal">
+      <div>
+        <h5 class="mb-3 text-3xl font-bold dark:text-white">{behandler.navn}</h5>
+      </div>
 
-  .field {
-    @apply mb-4;
-  }
-
-  .label {
-    @apply font-bold;
-  }
-</style>
-  
-<div class="container mx-auto mt-8">
-  <div class="card">
-    <div class="field">
-      <div class="label">Identifier:</div>
-      <div>{behandler.identifier}</div>
-    </div>
-    <div class="field">
-      <div class="label">Postnummer:</div>
-      <div>{behandler.postnummer}</div>
-    </div>
-    <div class="field">
-      <div class="label">Kliniktype:</div>
-      <div>{behandler.kliniktype}</div>
-    </div>
-    <div class="field">
-      <div class="label">Navn:</div>
-      <div>{behandler.navn}</div>
-    </div>
-    <div class="field">
-      <div class="label">Adresse:</div>
-      <div>{behandler.adresse}</div>
-    </div>
-    <div class="field" class:field-hidden={!behandler.beskrivelse}>
-      <div class="label">Beskrivelse:</div>
-      <div>{@html beskrivelse}</div>
-    </div>
-    <div class="field">
-      <div class="label">Opdateret:</div>
-      <div>{new Date(behandler.opdateret).toLocaleString()}</div>
-    </div>
-  </div>
+      <div class="py-5">
+        <h5 class="mb-2 text-2xl font-bold text-white-900 dark:text-white">Adresse</h5>
+        <h5 class="mb-5 font-normal text-gray-700 dark:text-gray-400 leading-tight">{behandler.adresse}, <br>{behandler.postnummer}</h5>
+        <h5 class="mb-2 text-2xl font-bold text-white-900 dark:text-white">Beskrivelse</h5>
+        <h5 class="mb-5 font-normal text-gray-700 dark:text-gray-400 leading-tight">{@html behandler.beskrivelse}</h5>
+        <h5 class="mb-2 text-2xl font-bold text-white-900 dark:text-white">Kliniktype</h5>
+        <h5 class="mb-5 font-normal text-gray-700 dark:text-gray-400 leading-tight">{behandler.kliniktype}</h5>
+        <h5 class="mb-2 text-2xl font-bold text-white-900 dark:text-white">Sidst opdateret</h5>
+        <h5 class="mb-5 font-normal text-gray-700 dark:text-gray-400 leading-tight">{behandler.opdateret}</h5>
+      </div>
+  </Card>
 </div>

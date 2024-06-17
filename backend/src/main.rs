@@ -59,11 +59,14 @@ async fn main() -> tide::Result<()> {
 
     app.with(cors);
 
-    // All physicians
-    app.at("/behandlere").get(behandler::list);
-
     // Single physician
     app.at("/behandler/:id").get(behandler::get);
+
+    // Single physician opening hours for scheduling an appointment
+    app.at("/behandler/aabningstider/:id").get(behandler::get_opening_hours);
+
+    // All physicians
+    app.at("/behandlere").get(behandler::list);
 
     // Sort by physician type
     app.at("/behandlere/:kliniktype").get(behandler::get_by_type);

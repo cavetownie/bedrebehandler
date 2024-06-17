@@ -11,6 +11,15 @@ pub struct Behandler {
     opdateret: chrono::NaiveDateTime,
 }
 
+#[derive(Clone, Serialize, Deserialize, FromRow, Debug)]
+pub struct Aabningstider {
+    identifier: i64,
+    behandler_id: i64,
+    day_of_week: i64,
+    open_time: chrono::NaiveTime,
+    close_time: chrono::NaiveTime,
+}
+
 #[derive(Deserialize, Debug, PartialEq)]
 #[serde(default)]
 pub struct BehandlerQueryParamters {
@@ -49,6 +58,17 @@ pub async fn get(behandler_id: &str, db: sqlx::Pool<Sqlite>) -> Result<Vec<Behan
     }
 }
 
+pub async fn get_opening_hours(behandler_id: &str, db: sqlx::Pool<Sqlite>) -> Result<Vec<Aabningstider>, Error> {
+    let query_res = sqlx::query_as::<_, Aabningstider>("SELECT * FROM behandler b join aabningstider oh on b.identifier = oh.behandler_id WHERE b.identifier = $1")
+        .bind(behandler_id)
+        .fetch_all(&db)
+        .await;
+
+    match query_res {
+        Ok(result) => Ok(result),
+        Err(err) =>  Err(tide::Error::new(tide::StatusCode::InternalServerError, err))
+    }
+}
 
 pub async fn get_by_type(behandler_type: &str, behandler: BehandlerQueryParamters, db: sqlx::Pool<Sqlite>) -> Result<Vec<Behandler>, Error> {
     if behandler.åben == false {

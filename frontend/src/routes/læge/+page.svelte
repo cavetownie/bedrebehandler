@@ -5,7 +5,7 @@
   let json: any[] = [];
 
   onMount(() => {
-    async function roll() {
+    async function populate() {
       try {
         const response = await fetch('http://localhost:8080/behandlere/læge');
         if (!response.ok) {
@@ -17,7 +17,7 @@
       }
     }
 
-  roll();
+    populate();
   });
 </script>
 
