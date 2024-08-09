@@ -74,3 +74,21 @@ pub async fn get_opening_hours(req: Request<State>) -> tide::Result {
         Err(err) => Err(err)
     }
 }
+
+pub async fn get_phone_numbers(req: Request<State>) -> tide::Result {
+    let db = req.state().db_pool.clone();
+    let behandler_id = req.param("id")?;
+
+    let behandlere_by_type = handlers::behandler::get_phone_numbers(behandler_id, db).await;
+
+    match behandlere_by_type {
+        Ok(result) => {
+            let mut res = tide::Response::new(tide::StatusCode::Ok);
+            res.set_body(serde_json::to_string(&result)?);
+
+            Ok(res)
+        }
+        // Propogate server error from handler
+        Err(err) => Err(err)
+    }
+}

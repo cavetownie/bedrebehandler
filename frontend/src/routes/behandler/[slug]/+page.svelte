@@ -10,6 +10,7 @@
 
 	let behandler: any = {};
 	let aabningstider: any[] = [];
+	let telefonnumre: any[] = [];
 
 	function capFirstLet(s: string) {
 		return s[0].toUpperCase() + s.slice(1);
@@ -26,11 +27,27 @@
 			return {
 				dayOfWeek,
 				openTime,
-				closeTime
+				closeTime,
 			};
 		});
 
 		return formattedHours;
+	}
+
+	function formatPhoneNumbers(phoneNumbers: any[]) {
+		const formattedPhoneNumbers = phoneNumbers.map((entry) => {
+			const identifier = entry.str_identifier;
+			const nummer = entry.telefon_nummer;
+			const beskrivelse = entry.beskrivelse;
+
+			return {
+				identifier,
+				nummer,
+				beskrivelse,	
+			};
+		});
+
+		return formattedPhoneNumbers;
 	}
 
 	onMount(() => {
@@ -74,9 +91,27 @@
 				console.error('Error fetching aabningstids data:', error);
 			}
 		}
+
+		async function get_telefonnumre(id: string) {
+			try {
+				const response = await fetch('http://localhost:8080/behandler/telefonnumre/' + id);
+				if (!response.ok) {
+					throw new Error('Failed to fetch data');
+				}
+
+				const tmp = await response.json();
+				if (tmp) {
+					telefonnumre = formatPhoneNumbers(tmp);
+				}
+			} catch (error) {
+				console.error('Error fetching aabningstids data:', error);
+			}
+		}
+		
 		
 		populate(data.name);
 		get_aabningstider(data.name);
+		get_telefonnumre(data.name);
 	});
 </script>
 
@@ -102,6 +137,13 @@
 			<Li>
 				{tid.dayOfWeek}
 				{tid.openTime} - {tid.closeTime}
+			</Li>
+		{/each}
+		<h5 class="mb-2 text-2xl font-bold text-white-900 dark:text-white">Telefonnumre</h5>
+		{#each telefonnumre as nummer}
+			<Li>
+				{nummer.identifier}
+				{nummer.nummer} {nummer.beskrivelse}
 			</Li>
 		{/each}
 		<h5 class="mb-2 text-2xl font-bold text-white-900 dark:text-white">Sidst opdateret</h5>

@@ -71,6 +71,9 @@ async fn main() -> tide::Result<()> {
     // Sort by physician type
     app.at("/behandlere/:kliniktype").get(behandler::get_by_type);
 
+    // Sort by physician type
+    app.at("/behandler/telefonnumre/:id").get(behandler::get_phone_numbers);
+
     // Sort by physician type and open TODO: Turn into query parameter
     app.listen("127.0.0.1:8080").await?;
     Ok(())
